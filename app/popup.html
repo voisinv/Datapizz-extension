@@ -14,7 +14,10 @@
     <header>
       Datapizz - Ajouter un article
     </header>
-    <input type="text" id="inputnewname" ng-model="ctrl.url"/>
+    <section id="first-section">
+      <input type="text" class="inputnewname" ng-model="ctrl.url"/>
+      <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
+    </section>
     <section>
       <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
       <button ng-click="ctrl.addTag()">Nouveau tag</button>
@@ -33,6 +36,7 @@
     </section>
     <div>
       <button ng-click="ctrl.save()">Sauvegarder</button>
+      <button ng-click="ctrl.goApp()">Aller sur l'app</button>
     </div>
       <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->

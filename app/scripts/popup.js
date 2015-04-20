@@ -32,9 +32,18 @@ var extensionCtrl = function($firebaseObject) {
 
   self.save = function() {
     console.log(self.tags, self.tags.filter(function(e){console.log(e.select); return e.select}))
+  };
+
+  self.goApp = function() {
+    chrome.tabs.create({url: 'http://datapizz.herokuapp.com'})
   }
 
-  chrome.tabs.getSelected(null,function(onglet){self.url = onglet.url});
+  chrome.tabs.getSelected(null,function(onglet){
+    console.log('onglet', onglet);
+    var url = onglet.url;
+    self.url = url.substr(url.indexOf('://')+3)
+    self.title=onglet.title;
+  });
 };
 
 angular.module('datapizz-extension', ['firebase'])
