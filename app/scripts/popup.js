@@ -1,37 +1,46 @@
 'use strict';
 
-var extensionCtrl = function($firebaseObject) {
+var extensionCtrl = function($http, URLS) {
   var self = this;
-  var ref = new Firebase('https://datapizzz.firebaseio.com/');
-  var data = $firebaseObject(ref);
+
   self.tagsSelected = [];
   self.tags = [];
   (function connect() {
     // download the data into a local object
-    return data.$loaded().then(function (res) {
+    console.log(URLS.getAll)
+    return $http.get(URLS.getAll).then(function (res) {
       console.log(res);
-      self.tags = res.tags
-      self.links = res.links;
-      self.articles = res.articles;
-      self.tags = _.each( res.tags, function ( e ){ e.select = false ; })
-      console.log(self)
+      self.links = res.data.links;
+      self.articles = res.data.articles;
+      self.tags = _.each( res.data.tags, function ( e ){ e.select = false ; })
+
       return;
     });
   })();
 
   self.addTag = function() {
     self.tags.push({
-      "articleId": [self.articles.length],
-      "id": self.tags.length,
-      "radius": 5,
       "value": self.nameNewTag,
       select: true
     });
-    console.log(self.tags);
+
   };
 
   self.save = function() {
-    console.log(self.tags, self.tags.filter(function(e){console.log(e.select); return e.select}))
+
+    var article = {
+      value: self.url,
+      title: self.title,
+      tags: []
+    };
+
+    _.each(self.tags.filter(function(e){return e.select}), function(e) {
+      var tag = {value: e.value};
+      if(e.hasOwnProperty('id')) tag.id = e.id;
+      article.tags.push(tag);
+    });
+
+    $http.post(URLS.setArticle, article).then(function(res){console.log('resultat', res)})
   };
 
   self.goApp = function() {
@@ -46,5 +55,5 @@ var extensionCtrl = function($firebaseObject) {
   });
 };
 
-angular.module('datapizz-extension', ['firebase'])
+angular.module('datapizz-extension', ['firebase', 'constant'])
 .controller('ExtensionCtrl', extensionCtrl);
