@@ -25,13 +25,13 @@
     <section>
     <h3>Tags sélectionné(s)</h3>
       <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tags track by $index" ng-click="tag.select=!tag.select" ng-class="{selected: tag.select}" ng-if="tag.select">{{tag.value}}</li>
+        <li class="tag" ng-repeat="tag in ctrl.tagsSelected track by $index">{{tag.value || tag}}</li>
       </ul>
     </section>
     <section>
       <h3>Tags à associer</h3>
       <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict" ng-click="tag.select=!tag.select" ng-class="{selected: tag.select}" ng-if="!tag.select">{{tag.value}}</li>
+        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict">{{tag.value}}</li>
       </ul>
     </section>
     <div>

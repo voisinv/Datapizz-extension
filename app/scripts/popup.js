@@ -1,6 +1,6 @@
 'use strict';
 
-var extensionCtrl = function($http, URLS) {
+var extensionCtrl = function($scope, $http, URLS) {
   var self = this;
 
   self.tagsSelected = [];
@@ -9,38 +9,43 @@ var extensionCtrl = function($http, URLS) {
     // download the data into a local object
     console.log(URLS.getAll)
     return $http.get(URLS.getAll).then(function (res) {
-      console.log(res);
-      self.links = res.data.links;
-      self.articles = res.data.articles;
-      self.tags = _.each( res.data.tags, function ( e ){ e.select = false ; })
-
-      return;
+      self.tags = res.data || []
+      self.tagsSelected = [];
+      console.log('res', res);
     });
   })();
 
   self.addTag = function() {
-    self.tags.push({
-      "value": self.nameNewTag,
-      select: true
-    });
-
+    self.tagsSelected.push(self.nameNewTag);
+    self.tagsSelected = _.uniq(self.tagsSelected);
+    self.nameNewTag = '';
   };
 
   self.save = function() {
-
     var article = {
       value: self.url,
       title: self.title,
-      tags: []
+      tagsToUpdate: {},
+      tagsToCreate: [],
+      articlesIds: _.sortBy(_.uniq(self.tagsSelected))
     };
 
-    _.each(self.tags.filter(function(e){return e.select}), function(e) {
-      var tag = {value: e.value};
-      if(e.hasOwnProperty('id')) tag.id = e.id;
-      article.tags.push(tag);
-    });
+    for(var i = 0, length = self.tagsSelected.length; i < length ; i++) {
+      var currentValue = self.tagsSelected[i];
 
-    $http.post(URLS.setArticle, article).then(function(res){console.log('resultat', res)})
+      var o = _.findWhere(self.tags, {value: currentValue});
+      debugger;
+      if( o ) {
+        var key = _.findKey(self.tags, o);
+        article.tagsToUpdate[key] = o;
+      } else {
+        article.tagsToCreate.push(currentValue);
+      }
+    }
+
+    //article.tags = _.reject(self.tags, function(e) {return e.select == false})
+    console.log('save', self.tags, article.tags)
+    $http.post(URLS.setArticle, article).then(function(res){console.log('resultat', res); debugger;})
   };
 
   self.goApp = function() {
