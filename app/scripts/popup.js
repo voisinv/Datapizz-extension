@@ -45,7 +45,7 @@ var extensionCtrl = function($scope, $http, URLS) {
 
     //article.tags = _.reject(self.tags, function(e) {return e.select == false})
     console.log('save', self.tags, article.tags)
-    $http.post(URLS.setArticle, article).then(function(res){console.log('resultat', res); debugger;})
+    $http.post(URLS.setArticle, article).then(function(res){console.log('resultat', res);})
   };
 
   self.goApp = function() {
