@@ -27,9 +27,10 @@ li {
 }
 
 .selected {
-  color: black;
-  background-color: white !important;
+  color: white;
+  background-color: #2196F3 !important;
   border-radius: 30px;
+  border-color: white;
 }
 
 section {

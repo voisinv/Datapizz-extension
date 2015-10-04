@@ -23,15 +23,9 @@
       <button ng-click="ctrl.addTag()">Nouveau tag</button>
     </section>
     <section>
-    <h3>Tags sélectionné(s)</h3>
-      <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tagsSelected track by $index">{{tag.value || tag}}</li>
-      </ul>
-    </section>
-    <section>
       <h3>Tags à associer</h3>
       <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict">{{tag.value}}</li>
+        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict" ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
       </ul>
     </section>
     <div>
@@ -40,10 +34,12 @@
     </div>
       <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/firebase/firebase.js"></script>
-    <script src="bower_components/angularfire/dist/angularfire.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
+    <!-- AngularJS -->
+    <script src="librairies/angular.js"></script>
+    <!-- Firebase -->
+    <script src="librairies/firebase.js"></script>
+    <!-- AngularFire -->
+    <script src="librairies/angularfire.min.js"></script>>
     <!-- endbower -->
     <!-- endbuild -->
     <script src="scripts/constant.js"></script>
