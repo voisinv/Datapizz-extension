@@ -3,28 +3,48 @@
   <head>
     <meta charset="utf-8">
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
     <!-- endbower -->
 
     <link href="styles/main.css" rel="stylesheet">
   </head>
   <body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl">
+    <div ng-if="ctrl.wait" class="loader">
+      <h1>
+        <span class="loader-spin loader-circle"></span>
+      </h1>
+    </div>
+
     <header>
       Datapizz - Ajouter un article
     </header>
+
     <section id="first-section">
       <input type="text" class="inputnewname" ng-model="ctrl.url"/>
       <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
     </section>
+
     <section>
       <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
       <button ng-click="ctrl.addTag()">Nouveau tag</button>
     </section>
+
     <section>
       <h3>Tags à associer</h3>
       <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict" ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
+        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict" ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">
+          {{tag.value}}
+        </li>
       </ul>
     </section>
+
+    <section>
+      <md-input-container flex>
+        <label>Name</label>
+        <input type="text"/>
+      </md-input-container>
+    </section>
+
     <div>
       <button ng-click="ctrl.save()">Sauvegarder</button>
       <button ng-click="ctrl.goApp()">Aller sur l'app</button>
@@ -35,6 +55,9 @@
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/angularfire/dist/angularfire.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
     <!-- endbower -->
 
     <script src="scripts/constant.js"></script>

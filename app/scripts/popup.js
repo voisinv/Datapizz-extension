@@ -8,12 +8,17 @@ var extensionCtrl = function($scope, $firebaseObject) {
 
   console.log('firebase obj', $firebaseObject(ref));
   self.data = $firebaseObject(ref);
+  self.wait = true;
+  self.tagValues = [];
 
-  self.data.$loaded()
-    .then(function() {
+  self.data.$loaded().then(function() {
       self.tags = self.data.tags.map(function(e) {
         return {value: e.value, selected: false};
       });
+      for(var i= 0; i< self.tags.length; i++) {
+        self.tagValues[i] = self.tags[i].value;
+      }
+      self.wait = false;
     });
 
   self.addTag = function() {
@@ -48,11 +53,9 @@ var extensionCtrl = function($scope, $firebaseObject) {
   };
 
   chrome.tabs.getSelected(null,function(onglet){
-    console.log('onglet', onglet);
     var url = onglet.url;
     self.url = url.substr(url.indexOf('://')+3);
-    self.title=onglet.title;
-
+    self.title = onglet.title;
   });
 };
 
