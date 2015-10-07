@@ -1,10 +1,12 @@
 'use strict';
 
+/* global angular, Firebase */
+
 var extensionCtrl = function($scope, $firebaseObject) {
   var self = this;
-  var ref = new Firebase("https://datapizzz.firebaseio.com/");
+  var ref = new Firebase('https://datapizzz.firebaseio.com/');
 
-  console.log('firebase obj', $firebaseObject(ref))
+  console.log('firebase obj', $firebaseObject(ref));
   self.data = $firebaseObject(ref);
 
   self.data.$loaded()
@@ -38,17 +40,17 @@ var extensionCtrl = function($scope, $firebaseObject) {
         tags: tags,
         url: self.url,
         title: self.title
-      })
+      });
   };
 
   self.goApp = function() {
-    chrome.tabs.create({url: 'http://pizzaaa.herokuapp.com'})
-  }
+    chrome.tabs.create({url: 'http://pizzaaa.herokuapp.com'});
+  };
 
   chrome.tabs.getSelected(null,function(onglet){
     console.log('onglet', onglet);
     var url = onglet.url;
-    self.url = url.substr(url.indexOf('://')+3)
+    self.url = url.substr(url.indexOf('://')+3);
     self.title=onglet.title;
 
   });

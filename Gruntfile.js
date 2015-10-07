@@ -117,6 +117,8 @@ module.exports = function (grunt) {
         'test/spec/{,*/}*.js'
       ]
     },
+
+    // grunt task for server-side mocha tests
     mocha: {
       all: {
         options: {
@@ -240,7 +242,7 @@ module.exports = function (grunt) {
             '{,*/}*.html',
             'styles/{,*/}*.css',
             'styles/fonts/{,*/}*.*',
-            '_locales/{,*/}*.json',
+            '_locales/{,*/}*.json'
           ]
         }]
       }
@@ -314,6 +316,7 @@ module.exports = function (grunt) {
     'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
+    'bowerInstall',
     'cssmin',
     'concat',
     'uglify',
