@@ -6,59 +6,49 @@ var extensionCtrl = function($scope, $firebaseObject) {
 
   console.log('firebase obj', $firebaseObject(ref))
   self.data = $firebaseObject(ref);
+  self.tags = [];
+
+  self.newVeg = function(chip) {
+    return {
+      name: chip,
+      type: 'unknown'
+    };
+  };
 
   self.data.$loaded()
     .then(function() {
       self.keys = self.data.tags ? _.keys(self.data.tags) : [];
-      self.tags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
+      self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
         e.key = self.keys[i];
         return e;
       }) : [];
 
     });
 
-  self.addTag = function() {
-
-    var index = _.indexOf(_.map(self.tags, function(e) {return e.value}), self.nameNewTag)
-    if (index >= 0) {self.tags[index].selected = true; return;}
-    self.newTag  = {value: self.nameNewTag};
-    self.newTag.selected = true;
-    self.tags.push(self.newTag);
-
-    self.nameNewTag = '';
-  };
-
-  self.selectItem = function(index) {
-    self.tags[index].selected = !self.tags[index].selected;
-  };
-
   self.save = function() {
-    var tags = self.tags.filter(function(e) {
-      return e.selected;
-    });
 
     var refTags = ref.child('tags');
-    tags.forEach(function(tag) {
-      if (tag.hasOwnProperty('key')) {
+    self.tags.forEach(function (tag) {
+      var index = _.indexOf(_.map(self.existingTags, function(e) {return e.value}), tag);
+      if (index >= 0) {
         refTags
-          .child(tag.key)
-          .update({radius: tag.radius + 5})
+          .child(self.keys[index])
+          .update({radius: self.existingTags[index].radius + 5})
       } else {
         refTags
           .push({
             radius: 5,
-            value: tag.value
+            value: tag
           });
       }
     });
 
     ref.child('articles')
       .push({
-        tags: tags,
+        tags: self.tags,
         url: self.url,
         title: self.title
       });
-
   };
 
   self.goApp = function() {
@@ -66,12 +56,18 @@ var extensionCtrl = function($scope, $firebaseObject) {
   };
 
   chrome.tabs.getSelected(null,function(onglet){
-    console.log('onglet', onglet);
     var url = onglet.url;
     self.url = url.substr(url.indexOf('://')+3)
     self.title=onglet.title;
   });
 };
 
-angular.module('datapizz-extension', ['firebase', 'constant'])
+angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('blue')
+      .backgroundPalette('grey')
+      .warnPalette('red')
+      .accentPalette('pink');
+  })
 .controller('ExtensionCtrl', extensionCtrl);

@@ -7,41 +7,80 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
+    <link href="bower_components/angular-material/angular-material.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
     <!-- endbuild -->
   </head>
-  <body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl">
-    <header>
-      Datapizz - Ajouter un article
-    </header>
-    <section id="first-section">
-      <input type="text" class="inputnewname" ng-model="ctrl.url"/>
-      <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
-    </section>
-    <section>
-      <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
-      <button ng-click="ctrl.addTag()">Nouveau tag</button>
-    </section>
-    <section>
-      <h3>Tags à associer</h3>
-      <ul class="">
-        <li class="tag" ng-repeat="tag in ctrl.tags track by $index | filter:search:strict" ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
-      </ul>
-    </section>
-    <div>
-      <button ng-click="ctrl.save()">Sauvegarder</button>
-      <button ng-click="ctrl.goApp()">Aller sur l'app</button>
+  <body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" style="padding: 0">
+  <md-toolbar layout="row">
+    <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
+  </md-toolbar>
+
+<div style="padding:10px">
+  <md-content layout-padding="" layout="row" layout-sm="column">
+    <b>Informations</b>
+    <div layout="" >
+      <md-input-container flex="">
+        <label>Url</label>
+        <input ng-model="ctrl.url">
+      </md-input-container>
+      <md-input-container flex="">
+        <label>Titre de l'article</label>
+        <input ng-model="ctrl.title">
+      </md-input-container>
     </div>
-      <!-- build:js scripts/vendor.js -->
+
+    <b>Ajouter des tags</b>
+    <md-chips ng-model="ctrl.tags"
+              readonly="ctrl.readonly"
+              placeholder="Enter a tag"
+              delete-button-label="Remove Tag"
+              delete-hint="Press delete to remove tag"
+              secondary-placeholder="+Tag">
+    </md-chips>
+  </md-content>
+
+  <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
+    <md-button class="md-raised">Annuler</md-button>
+    <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
+  </section>
+</div>
+  <!--
+      <header>
+        Datapizz - Ajouter un article
+      </header>
+      <section id="first-section">
+        <input type="text" class="inputnewname" ng-model="ctrl.url"/>
+        <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
+      </section>
+      <section>
+        <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
+        <button ng-click="ctrl.addTag()">Nouveau tag</button>
+      </section>
+      <section>
+        <h3>Tags à associer</h3>
+        <ul class="">
+          <li class="tag" ng-repeat="tag in ctrl.tags track by $index " ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
+        </ul>
+      </section>
+      <div>
+        <button ng-click="ctrl.save()">Sauvegarder</button>
+        <button ng-click="ctrl.goApp()">Aller sur l'app</button>
+      </div>
+      -->
+        <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <!-- AngularJS -->
-    <script src="librairies/angular.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
     <!-- Firebase -->
-    <script src="librairies/firebase.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
     <!-- AngularFire -->
-    <script src="librairies/angularfire.min.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
     <!-- Lodash -->
-    <script src="librairies/lodash.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <script src="scripts/constant.js"></script>
