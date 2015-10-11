@@ -3,3 +3,8 @@ body {
   height: 400px;
   padding: 20px;
 }
+.loader {
+    text-align: center;
+    padding-top: 20%;
+    padding-left: 40%;
+}

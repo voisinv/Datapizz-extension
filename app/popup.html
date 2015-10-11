@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
@@ -10,65 +10,73 @@
     <link href="bower_components/angular-material/angular-material.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
     <!-- endbuild -->
-  </head>
-  <body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" style="padding: 0">
-  <md-toolbar layout="row">
-    <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
-  </md-toolbar>
+</head>
+<body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" style="padding: 0">
 
-<div style="padding:10px">
-  <md-content layout-padding="" layout="row" layout-sm="column">
-    <b>Informations</b>
-    <div layout="" >
-      <md-input-container flex="">
-        <label>Url</label>
-        <input ng-model="ctrl.url">
-      </md-input-container>
-      <md-input-container flex="">
-        <label>Titre de l'article</label>
-        <input ng-model="ctrl.title">
-      </md-input-container>
+    <md-toolbar layout="row">
+        <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
+    </md-toolbar>
+
+    <div ng-if="ctrl.loading" class="loader">
+        <div layout="row" layout-sm="column" layout-align="space-around">
+            <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
+        </div>
     </div>
 
-    <b>Ajouter des tags</b>
-    <md-chips ng-model="ctrl.tags"
-              readonly="ctrl.readonly"
-              placeholder="Enter a tag"
-              delete-button-label="Remove Tag"
-              delete-hint="Press delete to remove tag"
-              secondary-placeholder="+Tag">
-    </md-chips>
-  </md-content>
+    <div ng-if="!ctrl.loading" style="padding:10px">
+        <md-content layout-padding="" layout="row" layout-sm="column">
+            <b>Informations</b>
+            <div layout="" >
+                <md-input-container flex="">
+                    <label>Url</label>
+                    <input ng-model="ctrl.url">
+                </md-input-container>
+                <md-input-container flex="">
+                    <label>Titre de l'article</label>
+                    <input ng-model="ctrl.title">
+                </md-input-container>
+            </div>
 
-  <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
-    <md-button class="md-raised">Annuler</md-button>
-    <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
-  </section>
-</div>
-  <!--
-      <header>
-        Datapizz - Ajouter un article
-      </header>
-      <section id="first-section">
-        <input type="text" class="inputnewname" ng-model="ctrl.url"/>
-        <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
-      </section>
-      <section>
-        <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
-        <button ng-click="ctrl.addTag()">Nouveau tag</button>
-      </section>
-      <section>
-        <h3>Tags à associer</h3>
-        <ul class="">
-          <li class="tag" ng-repeat="tag in ctrl.tags track by $index " ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
-        </ul>
-      </section>
-      <div>
-        <button ng-click="ctrl.save()">Sauvegarder</button>
-        <button ng-click="ctrl.goApp()">Aller sur l'app</button>
-      </div>
-      -->
-        <!-- build:js scripts/vendor.js -->
+            <b>Ajouter des tags</b>
+            <md-chips ng-model="ctrl.tags"
+                      readonly="ctrl.readonly"
+                      placeholder="Enter a tag"
+                      delete-button-label="Remove Tag"
+                      delete-hint="Press delete to remove tag"
+                      secondary-placeholder="+Tag">
+            </md-chips>
+        </md-content>
+
+        <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
+            <md-button class="md-raised" ng-click="ctrl.changeMode()">change</md-button>
+            <md-button class="md-raised">Annuler</md-button>
+            <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
+        </section>
+    </div>
+    <!--
+        <header>
+          Datapizz - Ajouter un article
+        </header>
+        <section id="first-section">
+          <input type="text" class="inputnewname" ng-model="ctrl.url"/>
+          <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
+        </section>
+        <section>
+          <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
+          <button ng-click="ctrl.addTag()">Nouveau tag</button>
+        </section>
+        <section>
+          <h3>Tags à associer</h3>
+          <ul class="">
+            <li class="tag" ng-repeat="tag in ctrl.tags track by $index " ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
+          </ul>
+        </section>
+        <div>
+          <button ng-click="ctrl.save()">Sauvegarder</button>
+          <button ng-click="ctrl.goApp()">Aller sur l'app</button>
+        </div>
+        -->
+    <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <!-- AngularJS -->
     <script src="bower_components/angular/angular.min.js"></script>
@@ -87,5 +95,5 @@
     <!-- build:js scripts/popup.js -->
     <script src="scripts/popup.js"></script>
     <!-- endbuild -->
-  </body>
+</body>
 </html>
