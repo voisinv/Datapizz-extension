@@ -10,6 +10,7 @@ var extensionCtrl = function($scope, $firebaseObject) {
     self.data = $firebaseObject(ref);
     self.tags = [];
     self.loading = true;
+    self.pizzaLoader = true;
 
     self.newVeg = function(chip) {
         return {

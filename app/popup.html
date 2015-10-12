@@ -17,9 +17,15 @@
         <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
     </md-toolbar>
 
-    <div ng-if="ctrl.loading" class="loader">
+    <div ng-if="ctrl.loading && !ctrl.pizzaLoader" class="material-loader">
         <div layout="row" layout-sm="column" layout-align="space-around">
             <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
+        </div>
+    </div>
+
+    <div ng-if="ctrl.loading && ctrl.pizzaLoader">
+        <div layout="row" layout-sm="column" layout-align="space-around">
+            <img src="http://preloaders.net/preloaders/327/Pizza%20spinning.gif" class="pizza-loader"/>
         </div>
     </div>
 
