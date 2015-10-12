@@ -18,14 +18,19 @@ var extensionCtrl = function($scope, $firebaseObject) {
         };
     };
 
-    self.data.$loaded().then(function() {
-        self.keys = self.data.tags ? _.keys(self.data.tags) : [];
-        self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
-            e.key = self.keys[i];
+    self.data.$loaded().then(
+        function() {
+            console.log(self.data);
+            self.keys = self.data.tags ? _.keys(self.data.tags) : [];
+            self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
+                e.key = self.keys[i];
+                return e;
+            }) : [];
             self.loading = false;
-            return e;
-        }) : [];
-    });
+        },
+        function() {
+            console.log('error from firebase response');
+        });
 
     self.save = function() {
 
