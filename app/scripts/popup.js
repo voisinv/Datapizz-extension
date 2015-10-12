@@ -4,7 +4,7 @@
 
 var extensionCtrl = function($scope, $firebaseObject) {
     var self = this;
-    var ref = new Firebase('https://test-datapizz.firebaseio.com/');
+    var ref = new Firebase('https://pizzaaa.firebaseio.com/');
 
     console.log('firebase obj', $firebaseObject(ref));
     self.data = $firebaseObject(ref);
