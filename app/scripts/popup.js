@@ -1,10 +1,11 @@
 'use strict';
 
-/* global angular, Firebase, _ */
+/* global angular, Firebase, _, moment */
 
 var extensionCtrl = function($scope, $firebaseObject) {
     var self = this;
     var ref = new Firebase('https://pizzaaa.firebaseio.com/');
+    //var ref = new Firebase('https://test-datapizz.firebaseio.com/');
 
     console.log('firebase obj', $firebaseObject(ref));
     self.data = $firebaseObject(ref);
@@ -21,7 +22,6 @@ var extensionCtrl = function($scope, $firebaseObject) {
 
     self.data.$loaded().then(
         function() {
-            console.log(self.data);
             self.keys = self.data.tags ? _.keys(self.data.tags) : [];
             self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
                 e.key = self.keys[i];
@@ -55,7 +55,8 @@ var extensionCtrl = function($scope, $firebaseObject) {
             .push({
                 tags: self.tags,
                 url: self.url,
-                title: self.title
+                title: self.title,
+                date: moment().format('DD-MM-YYYY')
             });
     };
 
@@ -66,7 +67,7 @@ var extensionCtrl = function($scope, $firebaseObject) {
     chrome.tabs.getSelected(null,function(onglet){
         var url = onglet.url;
         self.url = url.substr(url.indexOf('://')+3);
-        self.title=onglet.title;
+        self.title = onglet.title;
     });
 };
 
