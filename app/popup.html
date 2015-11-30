@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
@@ -54,47 +55,21 @@
         </md-content>
 
         <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
-            <md-button class="md-raised" ng-click="ctrl.changeMode()">change</md-button>
             <md-button class="md-raised">Annuler</md-button>
             <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
         </section>
     </div>
-    <!--
-        <header>
-          Datapizz - Ajouter un article
-        </header>
-        <section id="first-section">
-          <input type="text" class="inputnewname" ng-model="ctrl.url"/>
-          <input type="text" class="inputnewname" ng-model="ctrl.title" placeholder="Titre de l'article"/>
-        </section>
-        <section>
-          <input placeholder="Nom du nouveau tag" ng-model="ctrl.nameNewTag" />
-          <button ng-click="ctrl.addTag()">Nouveau tag</button>
-        </section>
-        <section>
-          <h3>Tags à associer</h3>
-          <ul class="">
-            <li class="tag" ng-repeat="tag in ctrl.tags track by $index " ng-click="ctrl.selectItem($index)" ng-class="{selected: tag.selected}">{{tag.value}}</li>
-          </ul>
-        </section>
-        <div>
-          <button ng-click="ctrl.save()">Sauvegarder</button>
-          <button ng-click="ctrl.goApp()">Aller sur l'app</button>
-        </div>
-        -->
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
-    <!-- AngularJS -->
-    <script src="bower_components/angular/angular.min.js"></script>
-    <!-- Firebase -->
+    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/firebase/firebase.js"></script>
-    <!-- AngularFire -->
-    <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
-    <!-- Lodash -->
-    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
-    <script src="bower_components/lodash/lodash.min.js"></script>
-    <script src="bower_components/angular-material/angular-material.min.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <script src="scripts/constant.js"></script>
