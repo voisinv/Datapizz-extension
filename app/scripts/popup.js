@@ -56,7 +56,7 @@ var extensionCtrl = function($scope, $firebaseObject) {
                 tags: self.tags,
                 url: self.url,
                 title: self.title,
-                date: moment().format('DD-MM-YYYY')
+                date: moment().valueOf()
             });
     };
 
