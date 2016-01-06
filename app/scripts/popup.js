@@ -12,6 +12,8 @@ var extensionCtrl = function($scope, $firebaseObject) {
     self.tags = [];
     self.loading = true;
     self.pizzaLoader = true;
+    self.isNewTag = false;
+    self.newTagCategory = true;
 
     self.newVeg = function(chip) {
         return {
@@ -34,7 +36,6 @@ var extensionCtrl = function($scope, $firebaseObject) {
         });
 
     self.save = function() {
-
         var refTags = ref.child('tags');
         self.tags.forEach(function (tag) {
             var index = _.indexOf(_.map(self.existingTags, function(e) { return e.value; }), tag);

@@ -33,7 +33,7 @@
     <div ng-if="!ctrl.loading" style="padding:10px">
         <md-content layout-padding="" layout="row" layout-sm="column">
             <b>Informations</b>
-            <div layout="" >
+            <div layout="">
                 <md-input-container flex="">
                     <label>Url</label>
                     <input ng-model="ctrl.url">
@@ -52,10 +52,15 @@
                       delete-hint="Press delete to remove tag"
                       secondary-placeholder="+Tag">
             </md-chips>
+
+            <md-input-container flex ng-show="ctrl.isNewTag">
+                <label>Choisissez une catégorie pour ce nouveau tag</label>
+                <input ng-model="ctrl.newTagCategory" placeholder="catégorie">
+            </md-input-container>
         </md-content>
 
         <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
-            <md-button class="md-raised">Annuler</md-button>
+            <md-button class="md-raised" ng-click="ctrl.goApp()">Go app</md-button>
             <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
         </section>
     </div>
