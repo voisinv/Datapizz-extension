@@ -47,18 +47,30 @@
             <b>Ajouter des tags</b>
             <md-chips ng-model="ctrl.newTags"
                       readonly="ctrl.readonly"
-                      placeholder="Enter a tag"
                       delete-button-label="Remove Tag"
                       delete-hint="Press delete to remove tag"
-                      secondary-placeholder="+Tag"
-                      md-on-append="ctrl.isNewChip($chip)"
-                      ng-disable="ctrl.waitForCategory">
+                      md-on-append="ctrl.newVeg($chip)"
+                      ng-disable="ctrl.isNewTag">
                 <!-- autocomplete : http://codepen.io/mxab/pen/PPoRVQ?editors=101 -->
+
+                <md-autocomplete md-hide-autocomplete-on-enter
+                    md-selected-item="ctrl.selectedItem"
+                    md-search-text="ctrl.searchText"
+                    md-min-length="0"
+                    md-items="item in ctrl.querySearch(ctrl.searchText)"
+                    md-item-text="item.name"
+                    md-autoselect="true"
+                    placeholder="Enter a Tag">
+                    <span md-highlight-text="ctrl.searchText">{{item.value}}</span>
+                </md-autocomplete>
+                <button md-chip-remove="" class="md-primary vegetablechip">
+                    <md-icon md-svg-icon="md-close"></md-icon>
+                </button>
             </md-chips>
 
             <md-input-container ng-if="ctrl.isNewTag">
                 <label>Choisissez une catégorie pour ce nouveau tag</label>
-                <input ng-model="ctrl.newTagCategory" placeholder="catégorie">
+                <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag">
             </md-input-container>
         </md-content>
 

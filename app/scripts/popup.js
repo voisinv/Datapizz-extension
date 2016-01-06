@@ -15,7 +15,6 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
     self.pizzaLoader = true;
     self.isNewTag = false;
     self.newTagCategory = '';
-    self.waitForCategory = false;
 
     self.init = function() {
         // getting existing tags from firebase
@@ -34,19 +33,37 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
         );
     };
 
-    self.newVeg = function(chip) {
-        return {
-            name: chip,
-            type: 'unknown'
-        };
+    self.newVeg = function(tag) {
+        if (angular.isObject(tag)) {
+            self.isNewTag = false;
+            return tag.value;
+        } else if (angular.isString(tag)) {
+            self.isExistingChip(tag);
+            return tag;
+        }
     };
 
-    self.isNewChip = function(newTag) {
-        console.log(newTag);
-        var isNew = _.indexOf(self.existingTags.value, newTag);
-        console.log(isNew);
-        self.waitForCategory = true;
-        return isNew ? newTag : "";
+    self.isExistingChip = function(tag) {
+        for(var i=0; i<self.existingTags.length; i++) {
+            if(self.existingTags[i].value === tag) {
+                self.isNewTag = false;
+                return;
+            }
+        }
+        self.isNewTag = true;
+    };
+
+    self.selectedItem = null;
+    self.searchText = "";
+    self.querySearch = function(search) {
+        search = search || "";
+        return self.existingTags.filter(function(vO) {
+            return !search || vO.value.toLowerCase().indexOf(search.toLowerCase()) >= 0 ;
+        })
+    };
+
+    self.addCategory = function() {
+        self.isNewTag = false;
     };
 
     self.save = function() {
@@ -79,7 +96,7 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
         chrome.tabs.create({url: 'http://pizzaaa.herokuapp.com'});
     };
 
-    chrome.tabs.getSelected(null,function(onglet){
+    chrome.tabs.getSelected(null,function(onglet) {
         var url = onglet.url;
         self.url = url.substr(url.indexOf('://')+3);
         self.title = onglet.title;
@@ -94,4 +111,32 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
             .warnPalette('red')
             .accentPalette('pink');
     })
-    .controller('ExtensionCtrl', extensionCtrl);
+    .controller('ExtensionCtrl', extensionCtrl)
+    .directive('focusMe', function($timeout) {
+      return {
+        link: function(scope, element, attrs) {
+          scope.$watch(attrs.focusMe, function(value) {
+            if(value === true) {
+              console.log('value=',value);
+              //$timeout(function() {
+              element[0].focus();
+              scope[attrs.focusMe] = false;
+              //});
+            }
+          });
+        }
+      };
+    })
+    .directive('mdHideAutocompleteOnEnter', function () {
+      return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+          if(event.which === 13) {
+            scope.$apply(function (){
+              $scope.$$childHead.$mdAutocompleteCtrl.hidden = true;
+            });
+
+            event.preventDefault();
+          }
+        });
+      };
+    });
