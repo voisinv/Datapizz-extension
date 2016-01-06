@@ -2,18 +2,37 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function($scope, $firebaseObject) {
+var extensionCtrl = function($scope, $firebaseObject, $http) {
     var self = this;
     var ref = new Firebase('https://pizzaaa.firebaseio.com/');
     //var ref = new Firebase('https://test-datapizz.firebaseio.com/');
 
     console.log('firebase obj', $firebaseObject(ref));
     self.data = $firebaseObject(ref);
-    self.tags = [];
+    self.newTags = [];
+    self.existingTags = [];
     self.loading = true;
     self.pizzaLoader = true;
     self.isNewTag = false;
-    self.newTagCategory = true;
+    self.newTagCategory = '';
+    self.waitForCategory = false;
+
+    self.init = function() {
+        // getting existing tags from firebase
+        self.data.$loaded().then(
+            function() {
+                self.keys = self.data.tags ? _.keys(self.data.tags) : [];
+                self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
+                    e.key = self.keys[i];
+                    return e;
+                }) : [];
+                self.loading = false;
+            },
+            function() {
+                console.log('error from firebase response');
+            }
+        );
+    };
 
     self.newVeg = function(chip) {
         return {
@@ -22,18 +41,13 @@ var extensionCtrl = function($scope, $firebaseObject) {
         };
     };
 
-    self.data.$loaded().then(
-        function() {
-            self.keys = self.data.tags ? _.keys(self.data.tags) : [];
-            self.existingTags = self.data.tags ? _.values(self.data.tags).map(function(e, i) {
-                e.key = self.keys[i];
-                return e;
-            }) : [];
-            self.loading = false;
-        },
-        function() {
-            console.log('error from firebase response');
-        });
+    self.isNewChip = function(newTag) {
+        console.log(newTag);
+        var isNew = _.indexOf(self.existingTags.value, newTag);
+        console.log(isNew);
+        self.waitForCategory = true;
+        return isNew ? newTag : "";
+    };
 
     self.save = function() {
         var refTags = ref.child('tags');
