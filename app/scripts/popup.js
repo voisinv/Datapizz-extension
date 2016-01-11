@@ -15,6 +15,9 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
     self.pizzaLoader = true;
     self.isNewTag = false;
     self.newTagCategory = '';
+    self.videoMediaType = false;
+    self.imageMediaType = false;
+    self.textMediaType = false;
 
     self.init = function() {
         // getting existing tags from firebase
@@ -88,7 +91,10 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
                 tags: self.tags,
                 url: self.url,
                 title: self.title,
-                date: moment().valueOf()
+                date: moment().valueOf(),
+                video: self.videoMediaType,
+                image: self.imageMediaType,
+                text: self.textMediaType
             });
     };
 
