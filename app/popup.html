@@ -72,6 +72,18 @@
                 <label>Choisissez une catégorie pour ce nouveau tag</label>
                 <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag">
             </md-input-container>
+
+            <md-input-container flex="">
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+                    Vidéo
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+                    Image
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+                    Texte
+                </md-checkbox>
+            </md-input-container>
         </md-content>
 
         <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
