@@ -46,46 +46,52 @@
 
             <b>Ajouter des tags</b>
             <div layout="column">
-                    <md-chips ng-model="ctrl.newTags"
-                              readonly="ctrl.readonly"
-                              delete-button-label="Remove Tag"
-                              delete-hint="Press delete to remove tag"
-                              md-on-append="ctrl.newVeg($chip)"
-                              ng-disable="ctrl.isNewTag">
+                <md-chips ng-model="ctrl.newTags"
+                          readonly="ctrl.readonly"
+                          delete-button-label="Remove Tag"
+                          delete-hint="Press delete to remove tag"
+                          md-on-append="ctrl.newVeg($chip)"
+                          ng-disable="ctrl.isNewTag"
+                          focus-me="!ctrl.isNewTag">
 
-                        <!--<md-autocomplete md-hide-autocomplete-on-enter-->
-                            <!--md-selected-item="ctrl.selectedItem"-->
-                            <!--md-search-text="ctrl.searchText"-->
-                            <!--md-min-length="0"-->
-                            <!--md-items="item in ctrl.querySearch(ctrl.searchText)"-->
-                            <!--md-item-text="item.name"-->
-                            <!--md-autoselect="true"-->
-                            <!--placeholder="Enter a Tag">-->
-                            <!--<span md-highlight-text="ctrl.searchText">{{item.value}}</span>-->
-                        <!--</md-autocomplete>-->
-                        <button md-chip-remove="" class="md-primary vegetablechip">
-                            <md-icon md-svg-icon="md-close"></md-icon>
-                        </button>
-                    </md-chips>
+                    <!--<md-autocomplete md-hide-autocomplete-on-enter-->
+                        <!--md-selected-item="ctrl.selectedItem"-->
+                        <!--md-search-text="ctrl.searchText"-->
+                        <!--md-min-length="0"-->
+                        <!--md-items="item in ctrl.querySearch(ctrl.searchText)"-->
+                        <!--md-item-text="item.name"-->
+                        <!--md-autoselect="true"-->
+                        <!--placeholder="Enter a Tag">-->
+                        <!--<span md-highlight-text="ctrl.searchText">{{item.value}}</span>-->
+                    <!--</md-autocomplete>-->
+                    <button md-chip-remove="" class="md-primary vegetablechip">
+                        <md-icon md-svg-icon="md-close"></md-icon>
+                    </button>
+                    <md-chip-template>
+                        <span>{{$chip.value}}</span>
+                    </md-chip-template>
+                </md-chips>
 
                 <md-input-container ng-if="ctrl.isNewTag">
                     <label>Choisissez une catégorie pour ce nouveau tag</label>
-                    <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag">
+                    <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag" ng-enter="ctrl.addCategory()">
                 </md-input-container>
             </div>
 
+            <br>
+
             <b>Type de média</b>
-                <md-input-container layout="row">
-                    <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.videoMediaType" class="md-primary">
-                          Vidéo
-                    </md-checkbox>
-                    <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.imageMediaType" class="md-primary">
-                        Image
-                    </md-checkbox>
-                    <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.textMediaType" class="md-primary">
-                        Texte
-                    </md-checkbox>
-                </md-input-container>
+            <md-input-container layout="row">
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.videoMediaType" class="md-primary">
+                      Vidéo
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.imageMediaType" class="md-primary">
+                    Image
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.textMediaType" class="md-primary">
+                    Texte
+                </md-checkbox>
+            </md-input-container>
         </md-content>
 
         <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">

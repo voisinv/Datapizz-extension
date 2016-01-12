@@ -2,12 +2,11 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function($scope, $firebaseObject, $http) {
+var extensionCtrl = function($scope, $firebaseObject) {
     var self = this;
     var ref = new Firebase('https://pizzaaa.firebaseio.com/');
     //var ref = new Firebase('https://test-datapizz.firebaseio.com/');
 
-    console.log('firebase obj', $firebaseObject(ref));
     self.data = $firebaseObject(ref);
     self.newTags = [];
     self.existingTags = [];
@@ -39,10 +38,10 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
     self.newVeg = function(tag) {
         if (angular.isObject(tag)) {
             self.isNewTag = false;
-            return tag.value;
+            return tag;
         } else if (angular.isString(tag)) {
             self.isExistingChip(tag);
-            return tag;
+            return {value: tag, category: ''};
         }
     };
 
@@ -66,12 +65,13 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
     };
 
     self.addCategory = function() {
+        _.last(self.newTags).category = self.newTagCategory;
         self.isNewTag = false;
     };
 
     self.save = function() {
         var refTags = ref.child('tags');
-        self.tags.forEach(function (tag) {
+        self.newTags.forEach(function (tag) {
             var index = _.indexOf(_.map(self.existingTags, function(e) { return e.value; }), tag);
             if (index >= 0) {
                 refTags
@@ -81,21 +81,23 @@ var extensionCtrl = function($scope, $firebaseObject, $http) {
                 refTags
                     .push({
                         radius: 5,
-                        value: tag
+                        value: tag.value,
+                        category: tag.category
                     });
             }
         });
 
+        var tempArticle = {
+            tags: self.newTags,
+            url: self.url,
+            title: self.title,
+            date: moment().valueOf(),
+            video: self.videoMediaType,
+            image: self.imageMediaType,
+            text: self.textMediaType
+        };
         ref.child('articles')
-            .push({
-                tags: self.tags,
-                url: self.url,
-                title: self.title,
-                date: moment().valueOf(),
-                video: self.videoMediaType,
-                image: self.imageMediaType,
-                text: self.textMediaType
-            });
+            .push(tempArticle);
     };
 
     self.goApp = function() {
@@ -132,7 +134,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
           });
         }
       };
-    })
+    })/*
     .directive('mdHideAutocompleteOnEnter', function () {
       return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
@@ -141,6 +143,18 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
               $scope.$$childHead.$mdAutocompleteCtrl.hidden = true;
             });
 
+            event.preventDefault();
+          }
+        });
+      };
+    })*/
+    .directive('ngEnter', function() {
+      return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+          if(event.which === 13) {
+            scope.$apply(function(){
+              scope.$eval(attrs.ngEnter);
+            });
             event.preventDefault();
           }
         });
