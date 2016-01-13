@@ -12,7 +12,7 @@
     <link href="styles/main.css" rel="stylesheet">
     <!-- endbuild -->
 </head>
-<body  ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" style="padding: 0">
+<body ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" ng-init="ctrl.init()" style="padding: 0">
 
     <md-toolbar layout="row">
         <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
@@ -33,7 +33,7 @@
     <div ng-if="!ctrl.loading" style="padding:10px">
         <md-content layout-padding="" layout="row" layout-sm="column">
             <b>Informations</b>
-            <div layout="" >
+            <div layout="row">
                 <md-input-container flex="">
                     <label>Url</label>
                     <input ng-model="ctrl.url">
@@ -45,17 +45,57 @@
             </div>
 
             <b>Ajouter des tags</b>
-            <md-chips ng-model="ctrl.tags"
-                      readonly="ctrl.readonly"
-                      placeholder="Enter a tag"
-                      delete-button-label="Remove Tag"
-                      delete-hint="Press delete to remove tag"
-                      secondary-placeholder="+Tag">
-            </md-chips>
+            <div layout="column">
+                <md-chips ng-model="ctrl.newTags"
+                          readonly="ctrl.readonly"
+                          delete-button-label="Remove Tag"
+                          delete-hint="Press delete to remove tag"
+                          md-on-append="ctrl.newVeg($chip)"
+                          ng-disable="ctrl.isNewTag"
+                          focus-me="!ctrl.isNewTag">
+
+                    <!--<md-autocomplete md-hide-autocomplete-on-enter-->
+                        <!--md-selected-item="ctrl.selectedItem"-->
+                        <!--md-search-text="ctrl.searchText"-->
+                        <!--md-min-length="0"-->
+                        <!--md-items="item in ctrl.querySearch(ctrl.searchText)"-->
+                        <!--md-item-text="item.name"-->
+                        <!--md-autoselect="true"-->
+                        <!--placeholder="Enter a Tag">-->
+                        <!--<span md-highlight-text="ctrl.searchText">{{item.value}}</span>-->
+                    <!--</md-autocomplete>-->
+                    <button md-chip-remove="" class="md-primary vegetablechip">
+                        <md-icon md-svg-icon="md-close"></md-icon>
+                    </button>
+                    <md-chip-template>
+                        <span>{{$chip.value}}</span>
+                    </md-chip-template>
+                </md-chips>
+
+                <md-input-container ng-if="ctrl.isNewTag">
+                    <label>Choisissez une catégorie pour ce nouveau tag</label>
+                    <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag" ng-enter="ctrl.addCategory()">
+                </md-input-container>
+            </div>
+
+            <br>
+
+            <b>Type de média</b>
+            <md-input-container layout="row">
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.videoMediaType" class="md-primary">
+                      Vidéo
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.imageMediaType" class="md-primary">
+                    Image
+                </md-checkbox>
+                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.textMediaType" class="md-primary">
+                    Texte
+                </md-checkbox>
+            </md-input-container>
         </md-content>
 
         <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
-            <md-button class="md-raised">Annuler</md-button>
+            <md-button class="md-raised" ng-click="ctrl.goApp()">Go app</md-button>
             <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
         </section>
     </div>
