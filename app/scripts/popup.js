@@ -71,6 +71,7 @@ var extensionCtrl = function($scope, $firebaseObject) {
 
     self.save = function() {
         var refTags = ref.child('tags');
+        var newArticleTags = [];
         self.newTags.forEach(function (tag) {
             var index = _.indexOf(_.map(self.existingTags, function(e) { return e.value; }), tag);
             if (index >= 0) {
@@ -85,19 +86,19 @@ var extensionCtrl = function($scope, $firebaseObject) {
                         category: tag.category
                     });
             }
+
+            newArticleTags.push(tag.value);
         });
 
-        var tempArticle = {
-            tags: self.newTags,
+        ref.child('articles').push({
+            tags: newArticleTags,
             url: self.url,
             title: self.title,
             date: moment().valueOf(),
             video: self.videoMediaType,
             image: self.imageMediaType,
             text: self.textMediaType
-        };
-        ref.child('articles')
-            .push(tempArticle);
+        });
     };
 
     self.goApp = function() {
