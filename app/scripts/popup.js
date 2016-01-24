@@ -2,10 +2,10 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function ($scope, $firebaseObject) {
+var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles) {
   var self = this;
   //var ref = new Firebase('https://pizzaaa.firebaseio.com/');
-  var ref = new Firebase('https://datapizzz.firebaseio.com/');
+  var ref = new Firebase('https://dev-fb.firebaseio.com/');
 
   self.data = $firebaseObject(ref);
   self.newTags = [];
@@ -18,31 +18,26 @@ var extensionCtrl = function ($scope, $firebaseObject) {
   self.imageMediaType = false;
   self.textMediaType = false;
 
+  /**
+   * Initialize the app
+   * Get existing tags from ServiceArticles
+   */
   self.init = function () {
     // getting existing tags from firebase
-    self.data.$loaded().then(
-      function () {
-        self.keys = self.data.tags ? _.keys(self.data.tags) : [];
-        self.existingTags = self.data.tags ? _.values(self.data.tags).map(function (e, i) {
-          e.key = self.keys[i];
-          return e;
-        }) : [];
-        //self.existingTags = _.uniq(_.flatten(_.map(_.values(self.data.articles), 'tags')));
-
-        console.log(self.data.articles);
-        self.loading = false;
-      },
-      function () {
-        console.log('error from firebase response');
-      }
-    );
+    self.existingTags = ['foot', 'rugby', 'hand'];
+    self.loading = false;
+    ServiceArticles.get().then(function(res) {
+      self.res = res.existingTags;
+      self.loading = false;
+    });
   };
 
   self.newVeg = function (tag) {
     if (angular.isObject(tag)) {
       self.isNewTag = false;
       return tag;
-    } else if (angular.isString(tag)) {
+    }
+    else if (angular.isString(tag)) {
       self.isExistingChip(tag);
       return {value: tag, category: ''};
     }
@@ -60,11 +55,13 @@ var extensionCtrl = function ($scope, $firebaseObject) {
   self.selectedItem = null;
 
   self.searchText = "";
+  self.tagExist;
+  self.search;
   self.querySearch = function (search) {
-    search = search || "";
-    return self.existingTags.filter(function (vO) {
-      return !search || vO.value.toLowerCase().indexOf(search.toLowerCase()) >= 0;
-    })
+    self.search= search;
+    self.tagExist = ServiceArticles.getExistingTags(search.toLowerCase());
+    var res  = ServiceArticles.getExistingTags((''+search).toLowerCase());
+    return res;// res.length ? res : [search];
   };
 
   self.addCategory = function () {
@@ -126,7 +123,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
       .warnPalette('red')
       .accentPalette('pink');
   })
-  .controller('ExtensionCtrl', extensionCtrl)
+  .controller('ExtensionCtrl', extensionCtrl)/*
   .directive('focusMe', function ($timeout) {
     return {
       link: function (scope, element, attrs) {
@@ -141,7 +138,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
         });
       }
     };
-  })/*
+  })
    .directive('mdHideAutocompleteOnEnter', function () {
    return function (scope, element, attrs) {
    element.bind("keydown keypress", function (event) {
@@ -154,7 +151,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
    }
    });
    };
-   })*/
+   })
   .directive('ngEnter', function () {
     return function (scope, element, attrs) {
       element.bind("keydown keypress", function (event) {
@@ -166,4 +163,4 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
         }
       });
     };
-  });
+  });*/
