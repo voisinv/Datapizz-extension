@@ -1,120 +1,111 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css styles/main.css -->
-    <link href="bower_components/angular-material/angular-material.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-    <!-- endbuild -->
+  <meta charset="utf-8">
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link href="bower_components/angular-material/angular-material.min.css" rel="stylesheet">
+  <link href="styles/main.css" rel="stylesheet">
+  <!-- endbuild -->
 </head>
-<body ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" ng-init="ctrl.init()" style="padding: 0">
+<body ng-app="datapizz-extension" ng-controller="ExtensionCtrl as ctrl" ng-init="ctrl.init()" style="padding:0;" layout="column" >
 
-    <md-toolbar layout="row">
-        <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
-    </md-toolbar>
+<md-toolbar layout="row">
+  <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
+</md-toolbar>
 
-    <div ng-if="ctrl.loading && !ctrl.pizzaLoader" class="material-loader">
-        <div layout="row" layout-sm="column" layout-align="space-around">
-            <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
-        </div>
+<div ng-if="ctrl.loading && !ctrl.pizzaLoader" class="material-loader">
+  <div layout="row" layout-sm="column" layout-align="space-around">
+    <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
+  </div>
+</div>
+
+<div ng-if="ctrl.loading && ctrl.pizzaLoader">
+  <div layout="row" layout-sm="column" layout-align="space-around">
+    <img src="http://preloaders.net/preloaders/327/Pizza%20spinning.gif" class="pizza-loader"/>
+  </div>
+</div>
+
+<div ng-if="!ctrl.loading" style="padding:10px" layout="column" >
+  <md-content class="md-padding" layout="column">
+    <b>Informations</b>
+    <div layout="row">
+      <md-input-container flex="">
+        <label>Url</label>
+        <input ng-model="ctrl.url">
+      </md-input-container>
+      <md-input-container flex="">
+        <label>Titre de l'article</label>
+        <input ng-model="ctrl.title">
+      </md-input-container>
     </div>
 
-    <div ng-if="ctrl.loading && ctrl.pizzaLoader">
-        <div layout="row" layout-sm="column" layout-align="space-around">
-            <img src="http://preloaders.net/preloaders/327/Pizza%20spinning.gif" class="pizza-loader"/>
-        </div>
+    <b>Ajouter des tags</b>
+    <div style="width:inherit" layout="column">
+      <md-chips ng-model="ctrl.tags" md-autocomplete-snap
+                md-transform-chip="ctrl.transformChip($chip, $event)"
+                md-require-match="ctrl.autocompleteDemoRequireMatch"
+                >
+        <md-autocomplete
+          id="tagSelection"
+          md-selected-item="ctrl.selectedItem"
+          md-search-text="ctrl.searchText"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item"
+          placeholder="Enter a tag">
+          <span md-highlight-text="ctrl.searchText">{{item.value}} :: {{item.category}}</span>
+        </md-autocomplete>
+        <md-chip-template>
+        <span>
+          <strong>{{$chip.value}}</strong>
+          <em>({{$chip.category}})</em>
+        </span>
+        </md-chip-template>
+      </md-chips>
+
+      <md-input-container ng-if="ctrl.isNewTag">
+        <label>Choisissez une catégorie pour ce nouveau tag</label>
+        <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag"
+               ng-enter="ctrl.addCategory()">
+      </md-input-container>
     </div>
 
-    <div ng-if="!ctrl.loading" style="padding:10px">
-        <md-content layout-padding="" layout="row" layout-sm="column">
-            <b>Informations</b>
-            <div layout="row">
-                <md-input-container flex="">
-                    <label>Url</label>
-                    <input ng-model="ctrl.url">
-                </md-input-container>
-                <md-input-container flex="">
-                    <label>Titre de l'article</label>
-                    <input ng-model="ctrl.title">
-                </md-input-container>
-            </div>
+    <br>
 
-            <b>Ajouter des tags</b>
-            <div layout="column">
-                <md-chips ng-model="ctrl.newTags"
-                          readonly="ctrl.readonly"
-                          delete-button-label="Remove Tag"
-                          delete-hint="Press delete to remove tag"
-                          md-on-append="ctrl.newVeg($chip)"
-                          ng-disable="ctrl.isNewTag"
-                          focus-me="!ctrl.isNewTag">
+    <b>Type de média</b>
+    <md-input-container layout="row">
+      <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-repeat='mediaType in ctrl.mediaTypes' ng-model='mediaType.selected' class="md-primary">
+        {{mediaType.name}}
+      </md-checkbox>
+    </md-input-container>
+  </md-content>
 
-                    <!--<md-autocomplete md-hide-autocomplete-on-enter-->
-                        <!--md-selected-item="ctrl.selectedItem"-->
-                        <!--md-search-text="ctrl.searchText"-->
-                        <!--md-min-length="0"-->
-                        <!--md-items="item in ctrl.querySearch(ctrl.searchText)"-->
-                        <!--md-item-text="item.name"-->
-                        <!--md-autoselect="true"-->
-                        <!--placeholder="Enter a Tag">-->
-                        <!--<span md-highlight-text="ctrl.searchText">{{item.value}}</span>-->
-                    <!--</md-autocomplete>-->
-                    <button md-chip-remove="" class="md-primary vegetablechip">
-                        <md-icon md-svg-icon="md-close"></md-icon>
-                    </button>
-                    <md-chip-template>
-                        <span>{{$chip.value}}</span>
-                    </md-chip-template>
-                </md-chips>
-
-                <md-input-container ng-if="ctrl.isNewTag">
-                    <label>Choisissez une catégorie pour ce nouveau tag</label>
-                    <input ng-model="ctrl.newTagCategory" placeholder="catégorie" focus-me="ctrl.isNewTag" ng-enter="ctrl.addCategory()">
-                </md-input-container>
-            </div>
-
-            <br>
-
-            <b>Type de média</b>
-            <md-input-container layout="row">
-                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.videoMediaType" class="md-primary">
-                      Vidéo
-                </md-checkbox>
-                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.imageMediaType" class="md-primary">
-                    Image
-                </md-checkbox>
-                <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="ctrl.textMediaType" class="md-primary">
-                    Texte
-                </md-checkbox>
-            </md-input-container>
-        </md-content>
-
-        <section style="margin-top: 180px" layout="row" layout-align="end end" layout-wrap="">
-            <md-button class="md-raised" ng-click="ctrl.goApp()">Go app</md-button>
-            <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
-        </section>
-    </div>
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/firebase/firebase.js"></script>
-    <script src="bower_components/angularfire/dist/angularfire.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <script src="bower_components/lodash/lodash.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
-    <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-    <script src="scripts/constant.js"></script>
-    <!-- build:js scripts/popup.js -->
-    <script src="scripts/popup.js"></script>
-    <!-- endbuild -->
+  <section layout="row" layout-align="end end" layout-wrap="">
+    <md-button class="md-raised" ng-click="ctrl.goApp()">Go app</md-button>
+    <md-button class="md-raised md-warn" ng-click="ctrl.save()">Enregistrer</md-button>
+  </section>
+</div>
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/firebase/firebase.js"></script>
+<script src="bower_components/angularfire/dist/angularfire.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<script src="scripts/constant.js"></script>
+<!-- build:js scripts/popup.js -->
+<script src="scripts/popup.js"></script>
+<script src="scripts/services.js"></script>
+<!-- endbuild -->
 </body>
 </html>

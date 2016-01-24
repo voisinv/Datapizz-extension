@@ -1,6 +1,8 @@
 angular.module('datapizz-extension')
   .service('ServiceArticles', function ($firebaseObject) {
-    var existingTags = ['foot', 'rugby', 'hand'];
+    var existingTags;
+    var originalTags;
+    var articles;
 
     /**
      * First call to db
@@ -8,25 +10,31 @@ angular.module('datapizz-extension')
      * @returns {PromiseLike<TResult>|Promise<TResult>|Promise.<T>|*}
      */
     this.get = function () {
-      var ref = new Firebase('https://dev-fb.firebaseio.com/');
+      var ref = new Firebase('https://pizzaaa.firebaseio.com/');
 
       self.data = $firebaseObject(ref);
 
       return self.data.$loaded().then(function () {
-          self.keys = self.data.tags ? _.keys(self.data.tags) : [];
-          existingTags = self.data.tags ? _.uniq(_.flatten(_.map(self.data.articles, 'tags'))) : [];
-          //self.existingTags = _.uniq(_.flatten(_.map(_.values(self.data.articles), 'tags')));
-
-          console.log('existingTags', existingTags);
-          return {
-            existingTags: existingTags
-          }
+          articles = _.map(self.data.articles || []);
+          var tags = _.map(self.data.tags || [], _.partial(_.pick, _, 'value', 'category'));
+          existingTags = tags;
+          originalTags = angular.copy(tags);
+          return true;
         },
         function () {
-          console.log('error from firebase response');
         }
       );
     };
+
+    /**
+     * Check if the article where the app has been opened already exist in database
+     * If true, return it otherwise []
+     */
+    this.getArticleIfExist = function(title, url) {
+      return articles.filter(function(article) {
+        return article.title === title || article.url === url;
+      })
+    }
 
     /**
      * Check if str exists in existTags
@@ -34,17 +42,45 @@ angular.module('datapizz-extension')
      * @returns {boolean|*}
      */
     this.isTagExist = function(str) {
-      return _.some(existingTags, _.partial(_.contains, _, str))
+      return _.some(existingTags, function(elem) {
+        return _.contains((''+elem.value).toLowerCase(), str);
+      });
     }
 
     /**
-     * Get all existingTags where str is found
+     * Get all existingTags where str is found in value property
      * @param str
      * @returns [tags] - Array
      */
     this.getExistingTags = function(str) {
       return _.filter(existingTags, function(elem) {
-        return _.contains((''+elem).toLowerCase(), str);
+        return _.contains((''+elem.value).toLowerCase(), str);
       });
     }
+
+    /**
+     * Add new tag to existingTags list
+     */
+    this.addTag = function(tag) {
+      existingTags.push(tag);
+    }
+
+    /**
+     * Return categories
+     */
+    this.getCategories = function() {
+      return _.uniq(_.map(existingTags, 'category'));
+    }
+
+    /**
+     * Get tags to add in firebase
+     * @returns {T[]|Array.<T>}
+     */
+    this.getTagsToSave = function(tags) {
+      var originalTagsValue = _.map(originalTags, 'value');
+      return tags.filter(function(tag) {
+        return !(originalTagsValue.indexOf(('' + tag.value).toLowerCase()) + 1);
+      })
+    }
+
   });
