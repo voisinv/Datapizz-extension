@@ -4,8 +4,8 @@
 
 var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog) {
   var self = this;
-  //var ref = new Firebase('https://pizzaaa.firebaseio.com/');
-  var ref = new Firebase('https://dev-fb.firebaseio.com/');
+  var ref = new Firebase('https://test-datapizz.firebaseio.com/');
+  //var ref = new Firebase('https://dev-fb.firebaseio.com/');
 
   self.data = $firebaseObject(ref);
   self.tags = [];
@@ -25,7 +25,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     {
       name: 'Text',
       selected: false
-    }]
+    }];
 
   /**
    * Initialize the app
@@ -95,7 +95,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       })
     })($event);
     return null;
-  }
+  };
 
   self.save = function () {
     var refTags = ref.child('tags');
@@ -168,7 +168,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
       if (!_.isNull(val) && !_.isUndefined(val)) {
         $mdDialog.hide(self.selectedItem);
       }
-    })
+    });
 
     /**
      * Search for tags...
