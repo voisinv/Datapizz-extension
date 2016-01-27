@@ -70,28 +70,29 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       category: ''
     }
     /*
-    self.openDialog = (function ($event) {
-      $mdDialog.show({
-        controller: 'DialogCtrl',
-        controllerAs: 'ctrll',
-        templateUrl: 'dialog.tpl.html',
-        parent: angular.element(document.body),
-        targetEvent: $event,
-        clickOutsideToClose: true,
-        locals: {
-          categories: ServiceArticles.getCategories()
-        }
-      })
-      .then(function(res) {
-        var newTag = {
-          value: chip,
-          category: res
-        };
-        ServiceArticles.addTag(newTag);
-        self.tags.push(newTag)
-      })
-    })($event);
-    return null;*/
+     self.openDialog = (function ($event) {
+     $mdDialog.show({
+     controller: 'DialogCtrl',
+     controllerAs: 'ctrll',
+     templateUrl: 'dialog.tpl.html',
+     parent: angular.element(document.body),
+     targetEvent: $event,
+     clickOutsideToClose: true,
+     locals: {
+     categories: ServiceArticles.getCategories()
+     }
+     })
+     .then(function(res) {
+     var newTag = {
+     value: chip,
+     category: res
+     };
+     ServiceArticles.addTag(newTag);
+     self.tags.push(newTag)
+     })
+     })($event);
+     return null;*/
+  }
 
   self.save = function () {
     var refTags = ref.child('tags');
