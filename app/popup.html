@@ -57,12 +57,11 @@
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item"
           placeholder="Enter a tag">
-          <span md-highlight-text="ctrl.searchText">{{item.value}} :: {{item.category}}</span>
+          <span md-highlight-text="ctrl.searchText">{{item.value}}</span>
         </md-autocomplete>
         <md-chip-template>
         <span>
           <strong>{{$chip.value}}</strong>
-          <em>({{$chip.category}})</em>
         </span>
         </md-chip-template>
       </md-chips>

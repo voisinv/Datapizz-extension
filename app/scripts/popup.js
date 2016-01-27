@@ -2,10 +2,10 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog) {
+var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, DB_URL) {
   var self = this;
   //var ref = new Firebase('https://pizzaaa.firebaseio.com/');
-  var ref = new Firebase('https://dev-fb.firebaseio.com/');
+  var ref = new Firebase(DB_URL.PATH);
 
   self.data = $firebaseObject(ref);
   self.tags = [];
@@ -39,14 +39,6 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       // Check if this article has already been added
       var article = ServiceArticles.getArticleIfExist(self.title, self.url);
 
-      // If true
-      if (article.length) {
-        //Iterate over each mediaType of article registered
-        _.forEach(_.first(article).mediaTypes || [], function(type) {
-          // Automatically update mediaType for current article
-          _.findWhere(self.mediaTypes, {name: type}).selected = true;
-        });
-      }
     });
   };
 
@@ -68,11 +60,16 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
 
     // If user tap enter without having selected the autocomplete tag
     // To discuss
-    if (ServiceArticles.isTagExist(chip)) {
-      return ServiceArticles.getExistingTags(chip)[0];
-    }
+    //if (ServiceArticles.isTagExist(chip)) {
+    //  return ServiceArticles.getExistingTags(chip)[0];
+    //}
 
     // Otherwise, create a new one
+    return {
+      value: chip,
+      category: ''
+    }
+    /*
     self.openDialog = (function ($event) {
       $mdDialog.show({
         controller: 'DialogCtrl',
@@ -94,7 +91,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
         self.tags.push(newTag)
       })
     })($event);
-    return null;
+    return null;*/
   }
 
   self.save = function () {
@@ -108,7 +105,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     tagsToSave.forEach(function(tag) {
       refTags.push({
         value: tag.value,
-        category: tag.category
+        category: ''
       })
     });
 
@@ -143,6 +140,9 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
       .accentPalette('pink');
   })
   .controller('ExtensionCtrl', extensionCtrl)
+  .constant('DB_URL', {
+    PATH: 'https://pizzaaa.firebaseio.com/'
+  })
   .controller('DialogCtrl', function ($timeout, $q, $scope, $mdDialog, categories) {
     var self = this;
 

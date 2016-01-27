@@ -1,5 +1,5 @@
 angular.module('datapizz-extension')
-  .service('ServiceArticles', function ($firebaseObject) {
+  .service('ServiceArticles', function ($firebaseObject, DB_URL) {
     var existingTags;
     var originalTags;
     var articles;
@@ -10,7 +10,7 @@ angular.module('datapizz-extension')
      * @returns {PromiseLike<TResult>|Promise<TResult>|Promise.<T>|*}
      */
     this.get = function () {
-      var ref = new Firebase('https://pizzaaa.firebaseio.com/');
+      var ref = new Firebase(DB_URL.PATH);
 
       self.data = $firebaseObject(ref);
 
@@ -84,3 +84,4 @@ angular.module('datapizz-extension')
     }
 
   });
+
