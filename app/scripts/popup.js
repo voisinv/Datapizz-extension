@@ -25,7 +25,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     {
       name: 'Text',
       selected: false
-    }]
+    }];
 
   /**
    * Initialize the app
@@ -92,7 +92,6 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       })
     })($event);
     return null;*/
-  }
 
   self.save = function () {
     var refTags = ref.child('tags');
@@ -168,7 +167,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
       if (!_.isNull(val) && !_.isUndefined(val)) {
         $mdDialog.hide(self.selectedItem);
       }
-    })
+    });
 
     /**
      * Search for tags...
