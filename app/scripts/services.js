@@ -1,5 +1,5 @@
 angular.module('datapizz-extension')
-  .service('ServiceArticles', function ($firebaseObject, DB_URL) {
+  .service('ServiceArticles', function ($firebaseObject, constants) {
     var existingTags;
     var originalTags;
     var articles;
@@ -10,7 +10,7 @@ angular.module('datapizz-extension')
      * @returns {PromiseLike<TResult>|Promise<TResult>|Promise.<T>|*}
      */
     this.get = function () {
-      var ref = new Firebase(DB_URL.PATH);
+      var ref = new Firebase(constants.DB_PROD);
 
       self.data = $firebaseObject(ref);
 
@@ -34,7 +34,7 @@ angular.module('datapizz-extension')
       return articles.filter(function(article) {
         return article.title === title || article.url === url;
       })
-    }
+    };
 
     /**
      * Check if str exists in existTags
@@ -45,7 +45,7 @@ angular.module('datapizz-extension')
       return _.some(existingTags, function(elem) {
         return _.contains((''+elem.value).toLowerCase(), str);
       });
-    }
+    };
 
     /**
      * Get all existingTags where str is found in value property
@@ -53,24 +53,29 @@ angular.module('datapizz-extension')
      * @returns [tags] - Array
      */
     this.getExistingTags = function(str) {
-      return _.filter(existingTags, function(elem) {
-        return _.contains((''+elem.value).toLowerCase(), str);
-      });
-    }
+      return _.uniq(
+        _.filter(existingTags, function(elem) {
+          return _.contains((''+elem.value).toLowerCase(), str);
+        }),
+        function(tag) {
+          return tag.value;
+        }
+      );
+    };
 
     /**
      * Add new tag to existingTags list
      */
     this.addTag = function(tag) {
       existingTags.push(tag);
-    }
+    };
 
     /**
      * Return categories
      */
     this.getCategories = function() {
       return _.uniq(_.map(existingTags, 'category'));
-    }
+    };
 
     /**
      * Get tags to add in firebase
@@ -81,7 +86,7 @@ angular.module('datapizz-extension')
       return tags.filter(function(tag) {
         return !(originalTagsValue.indexOf(('' + tag.value).toLowerCase()) + 1);
       })
-    }
+    };
 
   });
 

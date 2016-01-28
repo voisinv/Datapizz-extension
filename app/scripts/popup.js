@@ -2,10 +2,10 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, DB_URL) {
+var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, constants) {
   var self = this;
-  //var ref = new Firebase('https://pizzaaa.firebaseio.com/');
-  var ref = new Firebase(DB_URL.PATH);
+
+  var ref = new Firebase(constants.DB_PROD);
 
   self.data = $firebaseObject(ref);
   self.tags = [];
@@ -68,7 +68,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     return {
       value: chip,
       category: ''
-    }
+    };
     /*
      self.openDialog = (function ($event) {
      $mdDialog.show({
@@ -92,7 +92,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
      })
      })($event);
      return null;*/
-  }
+  };
 
   self.save = function () {
     var refTags = ref.child('tags');
@@ -121,7 +121,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   };
 
   self.goApp = function () {
-    chrome.tabs.create({url: 'http://pizzaaa.herokuapp.com'});
+    chrome.tabs.create({url: constants.APP_PROD});
   };
 
   chrome.tabs.getSelected(null, function (onglet) {
@@ -131,7 +131,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   });
 };
 
-angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
+angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
   .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('blue')
@@ -140,8 +140,10 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase', 'constant'])
       .accentPalette('pink');
   })
   .controller('ExtensionCtrl', extensionCtrl)
-  .constant('DB_URL', {
-    PATH: 'https://pizzaaa.firebaseio.com/'
+  .constant('constants', {
+    DB_PROD: 'https://pizzaaa.firebaseio.com/',
+    DB_DEV: 'https://test-datapizz.firebaseio.com/',
+    APP_PROD: 'http://pizzaaa.herokuapp.com'
   })
   .controller('DialogCtrl', function ($timeout, $q, $scope, $mdDialog, categories) {
     var self = this;
