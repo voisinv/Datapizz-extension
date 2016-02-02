@@ -9,10 +9,13 @@ angular.module('datapizz-extension')
      * Configure and call the database to get tags and articles
      * @returns {PromiseLike<TResult>|Promise<TResult>|Promise.<T>|*}
      */
-    this.get = function () {
-      var ref = new Firebase(constants.DB_PROD);
+    this.get = function (URL) {
+      var ref = new Firebase(URL);
 
       self.data = $firebaseObject(ref);
+      existingsTags = [];
+      originalTags = [];
+      articles = [];
 
       return self.data.$loaded().then(function () {
           articles = _.map(self.data.articles || []);

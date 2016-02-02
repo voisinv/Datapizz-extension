@@ -2,12 +2,10 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, constants) {
+var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, $rootScope, constants) {
   var self = this;
 
-  var ref = new Firebase(constants.DB_PROD);
-
-  self.data = $firebaseObject(ref);
+  var ref;
   self.tags = [];
   self.existingTags = [];
   self.loading = true;
@@ -27,18 +25,34 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       selected: false
     }];
 
+  self.db = ['MILLENIALS', 'HERTA'];
+  self.dbSelected = self.db[1];
+
+  $scope.$watch(
+    function() {
+    return self.dbSelected;
+  }, function(val, old) {
+  if (val === old) return;
+    self.tags = [];
+    self.existingTags = [];
+    self.init();
+  });
+
   /**
    * Initialize the app
    * Get existing tags from ServiceArticles
    */
   self.init = function () {
     // getting existing tags from firebase
-    ServiceArticles.get().then(function () {
-      self.loading = false;
+    var URL = constants[self.dbSelected];
+    ref = new Firebase(URL);
 
+    self.data = $firebaseObject(ref);
+    ServiceArticles.get(URL).then(function () {
+      self.loading = false;
       // Check if this article has already been added
       var article = ServiceArticles.getArticleIfExist(self.title, self.url);
-
+      $rootScope.$evalAsync();
     });
   };
 
@@ -143,7 +157,9 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
   .constant('constants', {
     DB_PROD: 'https://pizzaaa.firebaseio.com/',
     DB_DEV: 'https://test-datapizz.firebaseio.com/',
-    APP_PROD: 'http://pizzaaa.herokuapp.com'
+    APP_PROD: 'http://pizzaaa.herokuapp.com',
+    MILLENIALS: 'https://pizzaaa.firebaseio.com/',
+    HERTA: 'https://herta.firebaseio.com/'
   })
   .controller('DialogCtrl', function ($timeout, $q, $scope, $mdDialog, categories) {
     var self = this;

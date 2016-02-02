@@ -18,6 +18,7 @@
   <h1 class="md-toolbar-tools">Ajouter un article</h1><span class="flex"></span>
 </md-toolbar>
 
+
 <div ng-if="ctrl.loading && !ctrl.pizzaLoader" class="material-loader">
   <div layout="row" layout-sm="column" layout-align="space-around">
     <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
@@ -32,6 +33,15 @@
 
 <div ng-if="!ctrl.loading" style="padding:10px" layout="column" >
   <md-content class="md-padding" layout="column">
+    <b>Connexion</b>
+    <md-input-container layout="column" layout-sm="row" layout-align="space-around">
+        <label>Database</label>
+        <md-select ng-model="ctrl.dbSelected">
+          <md-option ng-repeat="db in ctrl.db" value="{{db}}">
+            {{db}}
+          </md-option>
+        </md-select>
+      </md-input-container>
     <b>Informations</b>
     <div layout="row">
       <md-input-container flex="">
