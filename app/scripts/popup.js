@@ -12,10 +12,11 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   self.pizzaLoader = true;
   self.isNewTag = false;
   self.newTagCategory = '';
-  self.mediaTypes = [{
-    name: 'video',
-    selected: false
-  },
+  self.mediaTypes = [
+    {
+      name: 'video',
+      selected: false
+    },
     {
       name: 'Image',
       selected: false
@@ -30,13 +31,14 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
 
   $scope.$watch(
     function() {
-    return self.dbSelected;
-  }, function(val, old) {
-  if (val === old) return;
-    self.tags = [];
-    self.existingTags = [];
-    self.init();
-  });
+      return self.dbSelected;
+    },
+    function(val, old) {
+      if (val === old) return;
+      self.tags = [];
+      self.existingTags = [];
+      self.init();
+    });
 
   /**
    * Initialize the app
