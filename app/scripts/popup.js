@@ -7,7 +7,6 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
 
   var ref;
   self.tags = [];
-  self.existingTags = [];
   self.loading = true;
   self.pizzaLoader = true;
   self.isNewTag = false;
@@ -26,7 +25,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       selected: false
     }];
 
-  self.db = ['MILLENIALS', 'HERTA'];
+  self.db = ['MILLENIALS', 'DB_DEV', 'HERTA'];
   self.dbSelected = self.db[1];
 
   $scope.$watch(
@@ -36,9 +35,16 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     function(val, old) {
       if (val === old) return;
       self.tags = [];
-      self.existingTags = [];
       self.init();
     });
+
+  $scope.$watch(function() {
+    return self.tags.length;
+  }, function(val, old) {
+    if (val === old) return;
+    console.log(self.url);
+    localStorage.setItem('' + self.url, _.map(self.tags, 'value'));
+  });
 
   /**
    * Initialize the app
@@ -54,6 +60,13 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       self.loading = false;
       // Check if this article has already been added
       var article = ServiceArticles.getArticleIfExist(self.title, self.url);
+      console.log(typeof self.url, ''+self.url, localStorage['' + self.url], angular.isDefined(localStorage[''+self.url]));
+      if (angular.isDefined(localStorage[''+self.url])) {
+        self.tags = localStorage[''+self.url].split(',').map(function(e) {
+          return {value: e};
+        });
+        console.log(self.tags);
+      }
       $rootScope.$evalAsync();
     });
   };
@@ -133,7 +146,8 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       date: moment().valueOf(),
       mediaTypes: _.map(_.filter(self.mediaTypes, 'selected'), 'name')
     });
-    window.close();
+      localStorage.removeItem(self.url);
+      window.close();
   };
 
   self.goApp = function () {
@@ -158,7 +172,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
   .controller('ExtensionCtrl', extensionCtrl)
   .constant('constants', {
     DB_PROD: 'https://pizzaaa.firebaseio.com/',
-    DB_DEV: 'https://test-datapizz.firebaseio.com/',
+    DB_DEV: 'https://dev-fb.firebaseio.com/',
     APP_PROD: 'http://pizzaaa.herokuapp.com',
     MILLENIALS: 'https://pizzaaa.firebaseio.com/',
     HERTA: 'https://herta.firebaseio.com/'
