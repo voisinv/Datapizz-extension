@@ -2,7 +2,7 @@
 
 /* global angular, Firebase, _, moment */
 
-var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialog, $rootScope, constants) {
+var extensionCtrl = function($scope, $firebaseObject, ServiceArticles, $mdDialog, $rootScope, constants) {
   var self = this;
 
   var ref;
@@ -29,18 +29,18 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   self.dbSelected = self.db[1];
 
   $scope.$watch(
-    function () {
+    function() {
       return self.dbSelected;
     },
-    function (val, old) {
+    function(val, old) {
       if (val === old) return;
       self.tags = [];
       self.init();
     });
 
-  $scope.$watch(function () {
+  $scope.$watch(function() {
     return self.tags.length;
-  }, function (val, old) {
+  }, function(val, old) {
     if (val === old) return;
     localStorage.setItem('' + self.url, _.map(self.tags, 'value'));
   });
@@ -49,18 +49,18 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
    * Initialize the app
    * Get existing tags from ServiceArticles
    */
-  self.init = function () {
+  self.init = function() {
     // getting existing tags from firebase
     var URL = constants[self.dbSelected];
     ref = new Firebase(URL);
 
     self.data = $firebaseObject(ref);
-    ServiceArticles.get(URL).then(function () {
+    ServiceArticles.get(URL).then(function() {
       self.loading = false;
       // Check if this article has already been added
       var article = ServiceArticles.getArticleIfExist(self.title, self.url);
       if (angular.isDefined(localStorage['' + self.url])) {
-        self.tags = localStorage['' + self.url].split(',').map(function (e) {
+        self.tags = localStorage['' + self.url].split(',').map(function(e) {
           return {value: e};
         });
       }
@@ -71,14 +71,14 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   /**
    * Search for tags...
    */
-  self.querySearch = function (search) {
+  self.querySearch = function(search) {
     return ServiceArticles.getExistingTags(('' + search).toLowerCase());
   };
 
   /**
    * Return the proper object when the append is called.
    */
-  self.transformChip = function (chip, $event) {
+  self.transformChip = function(chip, $event) {
     // If it is an object, it's already a known chip
     if (angular.isObject(chip)) {
       return chip;
@@ -120,7 +120,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
      return null;*/
   };
 
-  self.save = function () {
+  self.save = function() {
     var refTags = ref.child('tags');
     var newArticleTags = [];
 
@@ -128,7 +128,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     var tagsToSave = ServiceArticles.getTagsToSave(self.tags);
 
     // save tags
-    tagsToSave.forEach(function (tag) {
+    tagsToSave.forEach(function(tag) {
       refTags.push({
         value: tag.value,
         category: ''
@@ -147,11 +147,11 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     window.close();
   };
 
-  self.goApp = function () {
+  self.goApp = function() {
     chrome.tabs.create({url: constants.APP_PROD});
   };
 
-  chrome.tabs.getSelected(null, function (onglet) {
+  chrome.tabs.getSelected(null, function(onglet) {
     var url = onglet.url;
     self.url = url.substr(url.indexOf('://') + 3);
     self.title = onglet.title;
@@ -159,7 +159,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
 };
 
 angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
-  .config(function ($mdThemingProvider) {
+  .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('blue')
       .backgroundPalette('grey')
@@ -174,7 +174,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
     MILLENIALS: 'https://pizzaaa.firebaseio.com/',
     HERTA: 'https://herta.firebaseio.com/'
   })
-  .controller('DialogCtrl', function ($timeout, $q, $scope, $mdDialog, categories) {
+  .controller('DialogCtrl', function($timeout, $q, $scope, $mdDialog, categories) {
     var self = this;
 
     // list of `state` value/display objects
@@ -183,19 +183,19 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
     // ******************************
     // Template methods
     // ******************************
-    self.cancel = function ($event) {
+    self.cancel = function($event) {
       $mdDialog.cancel();
     };
-    self.finish = function ($event) {
+    self.finish = function($event) {
       $mdDialog.hide(self.searchText);
     };
     // ******************************
     // Internal methods
     // ******************************
 
-    $scope.$watch(function () {
+    $scope.$watch(function() {
       return self.selectedItem;
-    }, function (val) {
+    }, function(val) {
       if (!_.isNull(val) && !_.isUndefined(val)) {
         $mdDialog.hide(self.selectedItem);
       }
@@ -206,7 +206,7 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
      */
     function querySearch(query) {
       var str = ('' + query).toLowerCase();
-      return _.filter(categories, function (elem) {
+      return _.filter(categories, function(elem) {
         return _.contains(('' + elem).toLowerCase(), str);
       });
     }
