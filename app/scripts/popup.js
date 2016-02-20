@@ -29,20 +29,19 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
   self.dbSelected = self.db[1];
 
   $scope.$watch(
-    function() {
+    function () {
       return self.dbSelected;
     },
-    function(val, old) {
+    function (val, old) {
       if (val === old) return;
       self.tags = [];
       self.init();
     });
 
-  $scope.$watch(function() {
+  $scope.$watch(function () {
     return self.tags.length;
-  }, function(val, old) {
+  }, function (val, old) {
     if (val === old) return;
-    console.log(self.url);
     localStorage.setItem('' + self.url, _.map(self.tags, 'value'));
   });
 
@@ -60,12 +59,10 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       self.loading = false;
       // Check if this article has already been added
       var article = ServiceArticles.getArticleIfExist(self.title, self.url);
-      console.log(typeof self.url, ''+self.url, localStorage['' + self.url], angular.isDefined(localStorage[''+self.url]));
-      if (angular.isDefined(localStorage[''+self.url])) {
-        self.tags = localStorage[''+self.url].split(',').map(function(e) {
+      if (angular.isDefined(localStorage['' + self.url])) {
+        self.tags = localStorage['' + self.url].split(',').map(function (e) {
           return {value: e};
         });
-        console.log(self.tags);
       }
       $rootScope.$evalAsync();
     });
@@ -131,7 +128,7 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
     var tagsToSave = ServiceArticles.getTagsToSave(self.tags);
 
     // save tags
-    tagsToSave.forEach(function(tag) {
+    tagsToSave.forEach(function (tag) {
       refTags.push({
         value: tag.value,
         category: ''
@@ -146,8 +143,8 @@ var extensionCtrl = function ($scope, $firebaseObject, ServiceArticles, $mdDialo
       date: moment().valueOf(),
       mediaTypes: _.map(_.filter(self.mediaTypes, 'selected'), 'name')
     });
-      localStorage.removeItem(self.url);
-      window.close();
+    localStorage.removeItem(self.url);
+    window.close();
   };
 
   self.goApp = function () {
@@ -196,9 +193,9 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
     // Internal methods
     // ******************************
 
-    $scope.$watch(function() {
+    $scope.$watch(function () {
       return self.selectedItem;
-    }, function(val) {
+    }, function (val) {
       if (!_.isNull(val) && !_.isUndefined(val)) {
         $mdDialog.hide(self.selectedItem);
       }
@@ -209,8 +206,8 @@ angular.module('datapizz-extension', ['ngMaterial', 'firebase'])
      */
     function querySearch(query) {
       var str = ('' + query).toLowerCase();
-      return _.filter(categories, function(elem) {
-        return _.contains((''+elem).toLowerCase(), str);
+      return _.filter(categories, function (elem) {
+        return _.contains(('' + elem).toLowerCase(), str);
       });
     }
   });
